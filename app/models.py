@@ -12,7 +12,17 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(255))
+    blogs = db.relationship('Blog', backref='user', lazy='dynamic')
 
 
     def __repr__(self):
         return f'User {self.username}'
+
+class Blog(db.Model):
+    __tablename__ = 'blogs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    post = db.Column(db.Text())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
