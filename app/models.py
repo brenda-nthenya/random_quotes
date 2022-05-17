@@ -49,7 +49,7 @@ class User(UserMixin,db.Model):
     def __repr__(self):
         return f'User {self.username}'
 
-class Blog(db.Model):
+class Blog(UserMixin,db.Model):
     __tablename__ = 'blogs'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -87,6 +87,14 @@ class Comments(db.Model):
     def delete_comment(self):
         db.session.delete(self)
         db.session.commit()
+
+    @classmethod
+    def get_comments(cls, blog_id):
+        '''
+        Takes in blo and retrieves all comments for that blog
+        '''
+        comments = Comments.query.filter_by(blog_id = blog_id).all()
+        return comments
 
     def __repr__(self):
         return f'User {self.name}'
