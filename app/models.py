@@ -1,6 +1,11 @@
-from sys import settrace
-from . import db
+
+from . import db,login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 class Quotes:
     '''Shows how the API will be consumed'''
@@ -15,8 +20,11 @@ class User(db.Model):
     username = db.Column(db.String(255))
     blogs = db.relationship('Blog', backref='user', lazy='dynamic')
     pass_secure = db.Column(db.String(255))
+    email = db.Column(db.String(255),unique=True,index=True)
+    bio = db.Column(db.String(255))
+    profile_pic_path = db.Column(db.String())
 
-    def save_u(self):
+    def save_user(self):
         db.session.add(self)
         db.session.commit()
 
@@ -47,9 +55,15 @@ class Blog(db.Model):
     title = db.Column(db.String(255))
     post = db.Column(db.Text())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    category = db.Column(db.String(255), index=True)
+    time = db.Column(db.DateTime, default = datetime.utcnow)
 
-    def save_p(self):
+    def save_blog(self):
         db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
 
         
