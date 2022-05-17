@@ -7,5 +7,5 @@ class BlogForm(FlaskForm):
     category = SelectField('Category', choices=[('Technology', 'Technology'),
     ('Science','Science'),('Food','Food'),('Entertainment','Entertainment'),
     ('History','History')],validators=[DataRequired()])
-    post = TextAreaField('Your Inspiring words', validators=[DataRequired()])
+    post = TextAreaField('Your Inspiring Blog', validators=[DataRequired()])
     submit = SubmitField('Pitch')
