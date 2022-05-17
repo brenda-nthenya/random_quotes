@@ -1,0 +1,8 @@
+#postform{
+    color:rgb(244, 242, 247);
+    margin-top: 3%;
+    background-color: rgba(0, 0, 0, 0.456);
+    padding:3%;
+    border-radius: 8px;
+    z-index: 1;
+}
