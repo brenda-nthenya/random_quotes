@@ -79,6 +79,8 @@ class Comments(db.Model):
     comment = db.Column(db.String())
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     blog_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
+    time = db.Column(db.DateTime, default = datetime.utcnow)
+
 
     def save_comment(self):
         db.session.add(self)
@@ -98,3 +100,44 @@ class Comments(db.Model):
 
     def __repr__(self):
         return f'User {self.name}'
+
+class Upvote(db.Model):
+    __tablename__ = 'upvotes'
+
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    blog_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
+    
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_upvotes(cls,id):
+        upvote = Upvote.query.filter_by(pitch_id=id).all()
+        return upvote
+
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'
+
+
+class Downvote(db.Model):
+    __tablename__ = 'downvotes'
+
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    blogs_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
+    
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+    @classmethod
+    def get_downvotes(cls,id):
+        downvote = Downvote.query.filter_by(pitch_id=id).all()
+        return downvote
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'
