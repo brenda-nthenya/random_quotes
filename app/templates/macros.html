@@ -1,0 +1,52 @@
+
+{% macro display(blogs) %}
+<section class="wrapper">
+	<div class="container">
+		<div class="row">
+			{% if blogs %}
+				{% for category in blogs %}
+				<div class="col-md-5">
+					<div class="card text-white bg-dark click-col" >
+						<div class="card-img-overlay d-flex flex-column">
+							<div class="card-body">
+								<small class="card-meta mb-2">{{category.title}}</small>
+								<h4 class="card-title mt-0 "><a class="text-white" herf="#">{{category.post}}</a></h4>
+
+								<div class="media">
+									<img class="mr-3 rounded-circle" src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/male-512.png" alt="User Profile pic" style="max-width:50px">
+									<div class="media-body">
+										<h6 class="my-0 text-white d-block">{{category.user.username}}</h6>
+										<small>{{category.category}}</small>
+									</div>
+								</div>
+
+								
+								
+							</div>
+							<div class="card-footer">
+								<div>
+									<span class="foot" >{{category.comment.count()}} Comments</span> 
+									<span class="foot" > <a href="{{url_for('main.like',id = category.id)}}">
+										<i class="fa fa-thumbs-up" style="font-size:36px;color: yellowgreen"></i></a> {{category.upvote.count()}}</span>
+									
+									<span class="foot"> <a href="{{url_for('main.dislike',id = category.id)}}">
+										<i class="fa fa-thumbs-down" style="color:red; font-size:36px"></i> {{category.downvote.count()}}</a></span>
+								</div>
+								<a href="{{url_for('main.comment',blog_id = category.id)}}" class="btn btn-info btn-sm"> Comment</a>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				{% else %}
+				<div class="card text-dark bg-light col-md-4">
+					<div class="card-body">
+						<p class="card-title">Category has 0 posts</p>
+					</div>
+				</div>
+				{% endif %}
+		</div>
+	</div>
+</section>
+{% endmacro %}

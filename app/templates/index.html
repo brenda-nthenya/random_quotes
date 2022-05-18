@@ -1,0 +1,82 @@
+
+{% extends 'base.html'%}
+{% import 'macros.html' as macro %}
+
+{% block content %}
+
+        <div  class="container" id="particles-js" style="color:antiquewhite">
+
+            <ul class="nav nav-pills nav-justified nav-fill" style="color:antiquewhite" role="tablist">
+                <li class="nav-item" >
+                    <a id ="cats" class="nav-link" style="color:antiquewhite" data-toggle="tab" href="#all"><strong>Blogs</strong> </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color:antiquewhite" id ="cats"data-toggle="tab" href="#random"><strong>Random</strong></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id ="cats" style="color:antiquewhite" data-toggle="tab" href="#technology"><strong>Tech</strong></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id ="cats" style="color:antiquewhite" data-toggle="tab" href="#science"><strong>Science</strong></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style="color:antiquewhite" id ="cats"data-toggle="tab" href="#food"><strong>Foodie</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color:antiquewhite" id ="cats"data-toggle="tab" href="#history"><strong>History</strong></a>
+                  </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color:antiquewhite" id ="cats"data-toggle="tab" href="#entertainment"><strong>Entertainment</strong></a>
+                </li>
+
+                
+
+            </ul>
+            <div class="tab-content">
+
+                <div  class="container tab-pane active" id="all"><br>
+                    {{ macro.display(blogs) }}
+                </div>
+                <div  class="container tab-pane fade" id="random"><br>
+                    <div class="col-md-5">
+                        <div class="card text-white bg-dark click-col " >
+                            <div class="card-img-overlay d-flex flex-column">
+                                <div class="card-body">
+                                    <small class="card-meta mb-2">Random Quote</small>
+                                    <h4 class="card-title mt-0 "><a class="text-white" herf="#">{{quote.quote}}</a></h4>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="media">
+                                        <img class="mr-3 rounded-circle" src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/male-512.png" alt="User Profile pic" style="max-width:50px">
+                                        <div class="media-body">
+                                            <h6 class="my-0 text-white d-block">{{quote.author}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div  class="container tab-pane fade" id="technology"><br>
+                    {{ macro.display(technology)}}
+                </div>
+                <div  class="container tab-pane fade" id="science"><br>
+                    {{ macro.display(science) }}
+                </div>
+                <div  class="container tab-pane fade" id="entertainment"><br>
+                    {{ macro.display(entertainment) }}
+                </div>
+                <div  class="container tab-pane fade" id="food"><br>
+                    {{ macro.display(food) }}
+                </div>
+                <div  class="container tab-pane fade" id="history"><br>
+                    {{ macro.display(history) }} 
+                </div>
+               
+            </div>
+        </div>
+
+
+
+        
+{% endblock%}

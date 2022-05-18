@@ -1,0 +1,32 @@
+<nav class="mb-1 navbar navbar-expand-lg" style="background-color: #392B58;">
+    <a class="navbar-brand" href="{{url_for('main.index')}}" style="color: #F2F4FF"><strong>INSPIRE</strong> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url_for('main.index')}}" style="color: #F2F4FF;" >Blogs and Ideas</a>
+                </li>
+            </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" style="color: #F2F4FF;" href="{{ url_for('main.profile', name=current_user.username) }}">{{current_user.username}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color: #F2F4FF;" href="{{ url_for('main.new_blog') }}">New Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color: #F2F4FF;" href="{{ url_for('auth.logout') }}">Log Out</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" style=" color: #F2F4FF" href="{{ url_for('auth.login') }}"><strong>Log In</strong></a>
+            </li>
+            {%endif%}
+
+        </ul>
+    </div>
+</nav>
+

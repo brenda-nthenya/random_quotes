@@ -1,0 +1,3 @@
+Hello {{user.username}}
+Inspire to be inspired. Share your blog and also read what
+others have shared. Feel free to leave a comment.
