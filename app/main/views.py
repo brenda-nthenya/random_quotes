@@ -4,7 +4,7 @@ from app.models import *
 from app.requests import get_quote
 from . import main
 from flask_login import login_required,current_user
-from .. import db
+from .. import db,photos
 from .forms import *
 
 @main.route('/', methods = ['GET','POST'])
@@ -16,6 +16,7 @@ def index():
     food = Blog.query.filter_by(category='Food').all()
     entertainment = Blog.query.filter_by(category = 'Entertainment').all()
     history = Blog.query.filter_by(category = 'History').all()
+
     
     return render_template('index.html', quote=quote, technology=technology,
     science=science,food=food,history=history,entertainment=entertainment,
@@ -34,7 +35,7 @@ def new_blog():
         new_blog_object.save_blog()
         return redirect(url_for('main.index'))
 
-    return render_template('blog.html', form=form )
+    return render_template('blog/blog.html', form=form )
 
 @main.route('/user/<name>')
 @login_required
@@ -69,7 +70,7 @@ def comment(blog_id):
 
 @main.route('/user/<name>/updateprofile', methods = ['POST','GET'])
 @login_required
-def updateprofile(name):
+def updateprof(name):
     form = UpdateProfile()
     user = User.query.filter_by(username = name).first()
     if user == None:
@@ -80,4 +81,27 @@ def updateprofile(name):
         user.save_user()
         return redirect(url_for('.profile',name = name))
 
-    return render_template('profile/update.html',form =form)
+    return render_template('profile/updateprof.html',form =form)
+
+
+@main.route('/user/<name>/update/pic',methods= ['POST'])
+@login_required
+def update_pic(name):
+    user = User.query.filter_by(username = name).first()
+    if 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        path = f'photos/{filename}'
+        user.profile_pic_path = path
+        db.session.commit()
+    return redirect(url_for('main.profile',name=name))
+
+@main.route('/blog/<int:blog_id>')
+@login_required
+def blog(blog_id):
+    comments = Comments.query.filter_by(blog_id = blog_id).all()
+    heading = 'Comments'
+    blog = Blog.query.get_or_404(blog_id)
+
+    title = 'Blogs'
+    return render_template('blog/blog.html', title = title, blog = blog, comments = comments, heading = heading)
+
