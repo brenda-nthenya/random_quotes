@@ -2,7 +2,7 @@
 from . import db,login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
-from flask_login import UserMixin
+from flask_login import UserMixin,current_user
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,6 +24,9 @@ class User(UserMixin,db.Model):
     email = db.Column(db.String(255),unique=True,index=True)
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
+    upvote = db.relationship('Upvote',backref='user',lazy='dynamic')
+    downvote = db.relationship('Downvote',backref='user',lazy='dynamic')
+    comment = db.relationship('Comments', backref='user', lazy='dynamic')
 
     def save_user(self):
         db.session.add(self)
@@ -49,7 +52,7 @@ class User(UserMixin,db.Model):
     def __repr__(self):
         return f'User {self.username}'
 
-class Blog(UserMixin,db.Model):
+class Blog(db.Model):
     __tablename__ = 'blogs'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -58,7 +61,9 @@ class Blog(UserMixin,db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     category = db.Column(db.String(255), index=True)
     time = db.Column(db.DateTime, default = datetime.utcnow)
-    comment = db.relationship('Comments', backref='user', lazy='dynamic')
+    comment = db.relationship('Comments', backref='blog', lazy='dynamic')
+    upvote = db.relationship('Upvote',backref='blog',lazy='dynamic')
+    downvote = db.relationship('Downvote',backref='blog',lazy='dynamic')
 
     def save_blog(self):
         db.session.add(self)
@@ -115,12 +120,12 @@ class Upvote(db.Model):
 
     @classmethod
     def get_upvotes(cls,id):
-        upvote = Upvote.query.filter_by(pitch_id=id).all()
+        upvote = Upvote.query.filter_by(blog_id=id).all()
         return upvote
 
 
     def __repr__(self):
-        return f'{self.user_id}:{self.pitch_id}'
+        return f'{self.user_id}:{self.blog_id}'
 
 
 class Downvote(db.Model):
@@ -128,7 +133,7 @@ class Downvote(db.Model):
 
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-    blogs_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
+    blog_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
     
 
     def save(self):
@@ -136,8 +141,8 @@ class Downvote(db.Model):
         db.session.commit()
     @classmethod
     def get_downvotes(cls,id):
-        downvote = Downvote.query.filter_by(pitch_id=id).all()
+        downvote = Downvote.query.filter_by(blog_id=id).all()
         return downvote
 
     def __repr__(self):
-        return f'{self.user_id}:{self.pitch_id}'
+        return f'{self.user_id}:{self.blog_id}'
