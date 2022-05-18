@@ -1,5 +1,5 @@
 
-from flask import render_template, request, redirect, url_for, abort
+from flask import render_template, request, redirect, url_for, abort,flash
 from app.models import *
 from app.requests import get_quote
 from . import main
@@ -30,12 +30,12 @@ def new_blog():
         title = form.title.data
         post = form.post.data
         category = form.category.data
-        user_id = current_user
-        new_blog_object = Blog(post=post,user_id=current_user._get_current_object().id,category=category,title=title)
+        user_id = current_user._get_current_object().id,
+        new_blog_object = Blog(post=post,user_id=current_user,category=category,title=title)
         new_blog_object.save_blog()
         return redirect(url_for('main.index'))
 
-    return render_template('blog/blog.html', form=form )
+    return render_template('blog.html', form=form )
 
 @main.route('/user/<name>')
 @login_required
@@ -103,7 +103,7 @@ def blog(blog_id):
     blog = Blog.query.get_or_404(blog_id)
 
     title = 'Blogs'
-    return render_template('blog/blog.html', title = title, blog = blog, comments = comments, heading = heading)
+    return render_template('blog.html', title = title, blog = blog, comments = comments, heading = heading)
 
 @main.route('/like/<int:id>',methods = ['POST','GET'])
 @login_required
@@ -136,3 +136,16 @@ def dislike(id):
     new_downvote = Downvote(user = current_user, blog_id=id)
     new_downvote.save()
     return redirect(url_for('main.index',id = id))
+
+@main.route("/blog/<int:blog_id>/delete", methods=['POST'])
+@login_required
+def delete_blog(blog_id):
+    user = User.query.filter_by(id = id).first()
+    blog = Blog.query.filter_by(id = blog_id).first()
+
+    blog.delete_blog()
+
+    flash('Your post has been deleted!', 'success')
+    return redirect(url_for("profile/profile.html", id = user.id))
+
+    
