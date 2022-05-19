@@ -1,7 +1,15 @@
 import os
+
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+print(uri)
 class Config:
     SECRET_KEY=os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://bee:QWERTY098@localhost/blogs'
+    
+
+    UPLOADED_PHOTOS_DEST = 'app/static/photos'
 
     # Mail Configurations
     MAIL_SERVER = 'smtp.googlemail.com'
@@ -15,13 +23,13 @@ class Config:
         pass
 
 class ProdConfig(Config):
-    pass
+    SQLALCHEMY_DATABASE_URI = uri
 
 class DevConfig(Config):
     DEBUG = True
 
-class TestConfig():
-    pass 
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://bee:QWERTY098@localhost/blogtest'
 
 config_options = {
     'development': DevConfig,
